@@ -1,0 +1,24 @@
+Prelude> [1,2,3]
+[1,2,3]
+Prelude> :t 3
+3 :: Num t => t
+Prelude> :t 3+5
+3+5 :: Num a => a
+Prelude> :t 3.4
+3.4 :: Fractional t => t
+Prelude> :t pi
+pi :: Floating a => a
+Prelude> :t [1,2,3]
+[1,2,3] :: Num t => [t]
+Prelude> :t \x -> x
+\x -> x :: t -> t
+Prelude> \x -> x
+
+<interactive>:18:1: error:
+    • No instance for (Show (t0 -> t0)) arising from a use of ‘print’
+        (maybe you haven't applied a function to enough arguments?)
+    • In a stmt of an interactive GHCi command: print it
+Prelude> 
+
+
+테일리커전 

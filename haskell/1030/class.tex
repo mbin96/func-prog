@@ -1,0 +1,187 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{kotex}
+% for the fancy \koTeX logo
+\usepackage{kotex-logo}
+
+\usepackage{minted}
+%-shell-escape
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+\title{hello haskell}
+\author{건국대학교 조현종}
+\date{October 30 2019}
+
+\maketitle
+
+\section{Install Haskell on Ubuntu}
+하스켈을 사용하기 위해서는 터미널창의 다음과 같은 명령어를 입력한다.
+\begin{minted}[breaklines]{bash}
+    $ sudo apt-get install haskell-platform
+\end{minted}
+
+
+\section{Using GHCi}
+설치가 완료되면, 터미널에 ghci를 입력해보자. 
+
+\begin{minted}[breaklines]{bash}
+    $ ghci
+\end{minted}
+다음과 같은 화면이 나올것이다.\\
+GHCi, version 8.0.2: http://www.haskell.org/ghc/  :? for help \\
+Prelude> \\
+GHCi 라는 Haskell 컴파일러 인터프리터를 실행했다. Prelude> 는 가장 기본적임 함수들이 정의된 모듈이다. 앞으로 우리는 하스켈로 모듈을 직접 작성하여 함수를 사용해 볼 것이다. \\
+그전에 여러가지 GHCi 명령어에 익숙해져보자.
+
+\begin{minted}[breaklines]{haskell}
+Prelude> :t 3
+3 :: Num t => t
+Prelude> :t 3+5
+3+5 :: Num a => a
+Prelude> :t 3.4
+3.4 :: Fractional t => t
+Prelude> :t pi
+pi :: Floating a => a
+Prelude> :t [1,2,3]
+[1,2,3] :: Num t => [t]
+Prelude> :t \x -> x
+\x -> x :: t -> t
+Prelude> \x -> x
+\end{minted}
+:t 명령어는 뒤에 오는 변수나 함수의 타입을 알려준다. 3 은 Num타입으로 추론되며, 자기 자신을 리턴한다. 3.4는 분수로 표현가능하므로 Fractional타입으로 추론된다. pi($\pi$)는 부동소수점이므로 Floating
+으로 추론된다.\\
+:edit 명령어는 현재 실행중인 모듈 파일을 실행하여 편집을 할수있게 한다. \\
+:set editor <editor name> 명령어는 :edit 명령을 실행할때 실행할 에디터를 선택한다. vim, gedit, nano, code(vscode) 등의 자신이 사용하기 편한 cui 혹은 gui 에디터를 사용하면 된다. \\
+:cd <directory> 명령어는 인터프리터에서 사용하는 디렉토리를 변경한다. 터미널에서 사용하는 것과 동일하게 사용하자. \\
+:load <*.hs> 하스켈 명령어 파일을 컴파일하고 모듈을 로드한다. 이 명령어를 실행하면, 이전에 로드되었던 모듈(ex.Prelude) 대신 현재 하스켈 명령어의 모듈이 로드된다. \\
+:reload 모듈을 다시 로드한다. :edit 명령어를 사용하여 편집한뒤엔 항상 리로드를 다시 해주어야 한다. \\
+:set +t 항상 타입을 출력한다. \\
+:quit 종료한다.
+
+
+
+\section{Haskell 기본문법}
+
+\subsection{주석다는법}
+\begin{minted}[breaklines]{haskell}
+    {-블럭주석다는법-}
+    {-
+        {-중첩주석-}
+        여기도 주석
+    -}
+    
+    --라인주석
+\end{minted}
+하스켈의 주석은 블럭주석과 라인주석으로 나뉜다. 블럭주석은 {-과-}사이에 있는 여러줄의 문자가 주석으로 처리된다. 위의 예시처럼 중첩하여 주석을 달수도 있다. 라인주석으로는 -- 바 두개를 연속으로 입력하는것으로 달수있다.  
+
+\subsection{module}
+하스켈은 모듈로서 정의되어 사용된다.
+\begin{minted}[breaklines]{haskell}
+    module Hello where
+\end{minted}
+모든 하스켈 파일의 최상단에는 모듈 이름이 정해진다. 모듈이름의 시작은 대문자로 시작되어야 한다. 위에서는 Hello로 지정하였다.
+
+\subsection{변수}
+\begin{minted}[breaklines]{haskell}
+    --변수
+    --변수와 함수는 무조껀 소문자로 시작해야함
+    --아래는 절차형 언어와 다르게 대입이 아닌 정의
+    --타입은 대부분 디폴트값을 추론해서 넣어줌
+    --integer
+    x = 3
+    --위문장 다음에 x = 5로 재정의 불가능하다.
+    
+    --정의의 순서는 중요하지 않음
+    --아래처럼 어딘가에 있기만 하면 괜찮다
+    --패턴매칭외에는 순서 마음대로 해도 괜찮다.
+    y = z + 1
+    z = 8
+\end{minted}
+변수는 소문자로 시작해야 하며, 영어와 숫자 그리고 '(single quote) 문자를 사용할수 있다. 파이썬과 같이 따로 선언을 거치지 않고도 사용할수 있다. 다만 함수형언어인 하스켈은, 절차형 언어와는 다르게 변수를 재정의 할 수 없다. 절차형 언어에서 변수에 값을 대입하는것과는 반대로, 함수형언어에서는 변수x 를 5와 같다고 정의 하는 것이다. 두번째 예시처럼 변수의 순서는 중요하지 않다. z가 나중에 정의되어있어도 컴파일 에러가 나지 않는다.
+
+\begin{minted}[breaklines]{haskell}
+
+    --명시적으로 타입 명시하기
+    x' :: Double
+    x' = 3
+    
+    --출력결과
+        {-
+        *Hello> x'
+        3.0
+        *Hello> :t x'
+        x' :: Double
+        -}
+    --출력끝
+    
+    --type safe한 언어이기 때문에 아래같은 정의는 불가능
+    --3을 문자로 타입 추론 하는것은 불가능하다.
+    x'' :: Char
+    x'' = 3
+\end{minted}
+    명시적으로 타입을 지정할수도 있다. x = 5는 int지만 x' :: Double 로 지정한뒤 값을 정의하면 GHCi 에서 타입을 확인할때 Double로 출력된다. 단, c와 다르게 type safe한 언어이기 때문에 x''을 character등의 숫자로 나타낼수 없는 타입을  선언하고 x''에 숫자를 정의하면 컴파일 에러가 난다.
+
+\subsection{}
+\begin{minted}[breaklines]{haskell}
+    module Hello where
+
+    {-블럭주석다는법-}
+    {-
+    {-중첩주석-}
+    여기도 주석
+    -}
+    --이 아래로는 모듈의 정의들
+    
+    --변수
+    --변수와 함수는 무조껀 소문자로 시작해야함
+    --나중에 배울 데이터 타입은 대문자로 시작해야함
+    
+    --아래는 절차형 언어와 다르게 대입이 아닌 정의
+    --대부분 디폴트값을 계산해서 넣어줌
+    --integer
+    x = 3
+    --위문장 다음에 x = 5로 재정의 불가능하다.
+    
+    --정의의 순서는 중요하지 않음
+    --아래처럼 어딘가에 있기만 하면 괜찮다
+    --패턴매칭외에는 순서 마음대로 해도 괜찮다.
+    y = z + 1
+    z = 8
+    
+    --명시적으로 타입 명시하기
+    x' :: Double
+    x' = 3
+    {-
+    *Hello> x'
+    3.0
+    *Hello> :t x'
+    x' :: Double
+    -}
+    
+    --type safe한 언어이기 때문에 아래같은 언어는 불가능
+    --3을 문자로 타입 추론 하는것은 절대 불가능
+    --x'' :: Char
+    --x'' = 3
+    --여기까지는 이미 화면에서 어떻게 찍을지 아는얘들
+    --타입 클래스중 show 클래스 
+    
+    --함수정의
+    --아래 f와 f'은 같다.
+    f = \x -> x + x
+    --위에 보단 밑에가 defualt타입으로 안변하는 안전한 방식
+    f' x = x + x
+\end{minted}
+
+
+
+
+
+\bibliographystyle{plain}
+\bibliography{references}
+https://downloads.haskell.org/~ghc/7.0.3/docs/html/users\_guide/ghci-set.html
+
+\end{document}
+
