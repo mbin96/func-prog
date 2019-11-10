@@ -1,0 +1,14 @@
+#!/usr/bin/env runhaskell
+
+module Main (
+    main, fancyString
+) where
+
+import Primes (factorize)
+
+main = do
+    putStrLn (fancyString (factorize 2880))
+
+fancyString []      = ""
+fancyString (p:[])  = show p
+fancyString (p:ps)  = show p ++ " x " ++ fancyString ps
