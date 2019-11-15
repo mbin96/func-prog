@@ -30,29 +30,30 @@ progress1 :: Integral i => (t -> t) -> i -> t -> [t]
 progress1 f n x
     | n <  0     =  error "Cannot apply negative times!"
     | n == 0     =  [x] 
-    | otherwise  =   (progress1 f (n - 1) x) ++ [(iterApp f n x)]
+    | otherwise  =  (progress1 f (n - 1) x) ++ [(iterApp f n x)]
 
 
--- progress2 :: Integral i => (t -> t) -> i -> t -> [t]
--- progress2 f n x
---     | n <  0     =  error "Cannot apply negative times!"
---     | 
+progress2 :: Integral i => (t -> t) -> i -> t -> [t]
+progress2 f n x
+    | n <  0     =  error "Cannot apply negative times!"
+    | n == 0     =  [x]
+    | otherwise  =  x : (progress2 f (n - 1) (f x))
 
 
--- progress3 :: Integral i => (t -> t) -> i -> t -> [t]
--- progress3 f n x
---     | n <  0     =  error "Cannot apply negative times!"
---     | 
+progress3 :: Integral i => (t -> t) -> i -> t -> [t]
+progress3 f n x
+    | n <  0     =  error "Cannot apply negative times!"
+    | n == 0     =  [x]
+    | otherwise  =  x : map f (progress3 f (n - 1) x)
+
+progress4 :: Integral i => (t -> t) -> i -> t -> [t]
+progress4 f n x
+    | n <  0     =  error "Cannot apply negative times!"
+    | otherwise  = map (\z -> iterApp f z x) [0..n]
 
 
--- progress4 :: Integral i => (t -> t) -> i -> t -> [t]
--- progress4 f n x
---     | n <  0     =  error "Cannot apply negative times!"
---     | 
-
-
--- progress :: Integral i => (t -> t) -> i -> t -> [t]
--- progress = progress2     -- progress1 ~ progress4 중에서 택1 하셔요.
+progress :: Integral i => (t -> t) -> i -> t -> [t]
+progress = progress4
 
 
 -- progress0 :: Integral i => (t -> t) -> i -> t -> [t]   -- incorrect
