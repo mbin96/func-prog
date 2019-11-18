@@ -11,16 +11,16 @@ module HW3 where
     f' n  =  False
     
     f'' :: Integer -> Bool
-    f'' n  =  False
+    f'' n  =  False -- 3이 아래에 있어서 위에께 우선 매치되고 아래껀 쓰이지 않음 redundant 경고
     f'' 3  =  True
     
     
-    
+    --이런식으로 식을 주고 코딩하라 할지 모름 
     fac :: Integer -> Integer
     fac 0 = 1
     fac n = n * fac (n - 1)
     
-    
+    -- [] ++
     rev :: [a] -> [a]
     rev [] = []
     rev (x:xs) = (rev xs)  ++ [x]
@@ -43,12 +43,11 @@ module HW3 where
     fromNat :: Integral i => Nat -> i
     
     fromNat Z       = 0
-    fromNat (S n)   = 1 + fromNat(n)
+    fromNat (S n)   = 1 + fromNat (n)
 
     
     addNat :: Nat -> Nat -> Nat
     
-    addNat Z Z          = Z
     addNat n Z          = n
     addNat Z m          = m
     --normal
